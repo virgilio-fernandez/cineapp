@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+
+
+
+
+		<div th:fragment="resultsList"  >
+			
+			<div class="row">
+				<table  class="table table-hover table-striped table-bordered">
+					<tr>
+						<th>N</th>
+						<th>Pelicula</th>
+						<th>Fecha / Hora</th>
+						<th>Cliente</th>
+						<th>Vendedor</th>
+						<th>Estado</th>
+						<th>Descuento</th>
+						<th>Subtotal</th>
+
+					</tr>
+					<tr th:each="lista,iterStat: ${lista}"
+						th:class="${iterStat.count}? 'count'">
+						<td th:text="${iterStat.count}">titulo</td>
+						<td
+							th:text="${lista.ptitulo} +' / '+ ${lista.tnombre} +' / '+  ${lista.taudio}"></td>
+						<td th:text="${lista.vfecha} +' / '+  ${lista.vhora}"></td>
+						<td
+							th:text="${lista.cnombre}  +' '+ ${lista.capellido1}  +' '+ ${lista.capellido2}"></td>
+						<td
+							th:text="${lista.unombre}  +' '+ ${lista.uapellido1}  +' '+ ${lista.uapellido2}"></td>
+						<td><span th:if="${lista.vestado == '1'}"
+								th:text="Pagada" class="label label-success"></span> <span
+								th:if="${lista.vestado != '1'}" th:text="Anulada"
+								class="label label-success"></span></td>
+						<td th:text="${lista.dnombre}+' '+ ${lista.dporcentaje}"></td>
+						<td th:text="${lista.dvsubtotal}"></td>
+
+					</tr>
+
+
+				</table>
+			</div>
+
+			<div class="row">
+				<div class="col-10"></div>
+				<div class="col-2">
+					Total: <span th:text="${total.total}"></span>
+
+				</div>
+
+			</div>
+		</div>
+		
+		
+
+
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		
+	</script>
+
+
+</body>
+</html>

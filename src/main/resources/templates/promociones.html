@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+	<header th:replace="layout/menu :: header"></header>
+
+
+	<div class="container">
+
+
+		<div class="row">
+		<div class="col-1 mt-3"></div>
+			<div class="col-10 mt-3">
+				<div class="carousel slide" id="principal-carousel"
+					data-ride="carousel">
+					<ol id="lista" class="carousel-indicators">
+						<th:block th:each="desc, iterstat : ${descuentos}">
+							<li data-target="#principal-carousel" th:id="'li'+${iterstat.index}"
+								th:attr="data-slide-to=${iterstat.index}"
+								th:class="${iterstat.index}== 0  ? 'active':''"></li>
+
+						</th:block>
+
+					</ol>
+
+
+					<div class="carousel-inner">
+						<th:block th:each="desc, iterstat : ${descuentos}">
+				
+
+							<div th:if="${iterstat.index}== 0" class="carousel-item active">
+								<img  th:src="@{/img-promociones/}+ ${desc.imagen}" alt="Slide" th:id="'img'+${iterstat.index}"
+									title="Some text">
+							</div>
+							<div th:if="${iterstat.index}!= 0" class="carousel-item">
+								<img th:src="@{/img-promociones/}+ ${desc.imagen}" alt="Slide" th:id="'img'+${iterstat.index}"
+									title="Some text">
+							</div>
+
+						</th:block>
+					</div>
+
+
+
+					<a href="#principal-carousel" class="carousel-control-prev"
+						data-slide="prev"> <span class="carousel-control-prev-icon"
+						aria-hidden="true"></span> <span class="sr-only">Anterior</span>
+					</a> <a href="#principal-carousel" class="carousel-control-next"
+						data-slide="next"> <span class="carousel-control-next-icon"
+						aria-hidden="true"></span> <span class="sr-only">Siguiente</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-1 mt-3"></div>
+		</div>
+	</div>
+	<div class="container marketing">
+			<!-- Columns of text below the carousel -->
+			<div class="row  d-flex align-items-center">
+
+				<th:block th:each="desc, iterstat : ${descuentos}">
+					<img class="img-rounded mt-4" th:id="${iterstat.index}" onclick="mostrar(this.id);"
+							th:src="@{/img-promociones/}+ ${desc.imagen}"
+							alt="Generic placeholder image" width="100" height="75"> &nbsp;&nbsp;
+						
+
+					
+			</th:block>
+
+			</div>
+			
+		
+
+		</div>
+
+
+
+
+	<!-- FOOTER -->
+	<footer th:replace="layout/menu :: footer"> </footer>
+	
+	<script>
+		function mostrar(id){
+		/*	 $("#lista li").each(function(){
+				
+	        });
+			alert(id);
+			$( "#li"+id ).attr( "class", "active" );
+			$( "#img"+id ).attr( "class", "active" );
+		*/	
+		}
+	</script>
+</body>
+</html>

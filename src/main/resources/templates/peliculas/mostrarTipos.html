@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<br>
+		<br>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th>Tipos Asignados</th>
+					<th>Tipos Sin asignar</th>
+
+				</tr>
+				<tr>
+					<td><th:block th:each="tiposAsig: ${tiposAsignados}">
+							<!--  			<a th:href="@{/peliculas/quitar/} + ${tiposAsig.pelicula.id} + '/' + ${tiposAsig.tipo.id}" th:text="${tiposAsig.tipo.tipo}"></a>
+ -->
+							<a
+								th:href="@{/peliculas/quitar/} + ${idPelicula} + '/' + ${tiposAsig.id}"
+								th:text="${tiposAsig.nombre}+ '  '+${tiposAsig.audio}+ '  '+${tiposAsig.calidad}"></a> <br>
+						</th:block></td>
+					<td><th:block th:each="tiposNoAsig: ${tiposNoAsignados}">
+							<a
+								th:href="@{/peliculas/asignar/} + ${idPelicula} + '/' + ${tiposNoAsig.id}"
+								th:text="${tiposNoAsig.nombre}+ '  '+${tiposNoAsig.audio}+ '  '+${tiposNoAsig.calidad} "></a><br>
+						</th:block></td>
+				</tr>
+
+			</table>
+		</div>
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+
+</body>
+</html>

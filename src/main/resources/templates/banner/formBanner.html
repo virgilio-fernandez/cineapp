@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/banner/save}" th:object="${banner}"
+			method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="titulo">Titulo</label> <input th:field="*{titulo}"
+							type="text" class="form-control" name="titulo" id="titulo"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="file">Imagen</label><br> <input th:if="${banner.archivo == null}" type="file" id="file"	name="file" required="required" />
+						<span id="nombreImagen" th:if="${banner.archivo != null}" th:text="${banner.archivo}+'  ' "></span><span id="imagen"><input type="button" class="btn btn-info" th:if="${banner.archivo != null}"  id="modImagen"
+							name="modImagen" value="Modificar Imagen" /></span>
+						
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estatus</label> <select
+							th:field="*{estado}" id="estado" name="estado"
+							class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>
+			
+			</div>
+			
+
+
+			<input type="hidden" th:field="*{id}"> 
+
+
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+	$('#modImagen').click(function() {
+		$("#modImagen").remove();
+		$("#nombreImagen").remove();
+		var button = '<input  type="file" id="file"	name="file" required="required"/>';
+		$("#imagen").append(button);
+		
+
+	});
+
+	</script>
+</body>
+</html>

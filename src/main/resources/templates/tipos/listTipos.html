@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<a th:href="@{/tipos/form}" class="btn btn-success" role="button"
+			title="Nuevo Tipo">Adicionar</a><br> <br>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th>Nº</th>
+					<th>Tipo</th>
+					<th>Calidad</th>
+					<th>Audio</th>
+					<th>Estatus</th>
+					<th>Opciones</th>
+				</tr>
+				<tr th:each="tipo,iterStat: ${tipos}" th:class="${iterStat.count}? 'count'">
+					<td th:text="${iterStat.count}"></td>
+					<td th:text="${tipo.nombre}"></td>
+					<td th:text="${tipo.calidad}"></td>
+					<td th:text="${tipo.audio}"></td>
+					<td><span th:if="${tipo.estado == true}" th:text="Activo"
+						class="label label-success"></span> <span
+						th:if="${tipo.estado != true}" th:text="Inactivo"
+						class="label label-success"></span></td>
+					<td><a th:href="@{/tipos/form/} + ${tipo.id}"
+						class="btn btn-success btn-sm" role="button" title="Edit"><span
+							class="glyphicon glyphicon-pencil">Modificar</span></a> 
+						<a th:if="${tipo.estado == true}" onclick="return confirm('Estas seguro que desea eliminar?');"
+						th:href="@{/tipos/eliminar/} + ${tipo.id}"
+						class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
+							class="glyphicon glyphicon-trash">Eliminar</span></a></td>
+				</tr>
+
+			</table>
+		</div>
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+
+</body>
+</html>

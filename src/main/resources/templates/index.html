@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+	<header th:replace="layout/menu :: header"></header>
+
+
+	<div class="container-fluid">
+
+
+		<div class="row">
+			<div class="col-12 mt-3">
+				<div class="carousel slide" id="principal-carousel"
+					data-ride="carousel">
+					<ol class="carousel-indicators">
+						<th:block th:each="publi, iterstat : ${publicidad}">
+							<li data-target="#principal-carousel"
+								th:id="'li'+${iterstat.index}"
+								th:attr="data-slide-to=${iterstat.index}"
+								th:class="${iterstat.index}== 0  ? 'active':''"></li>
+
+						</th:block>
+
+					</ol>
+
+					<div class="carousel-inner">
+						<th:block th:each="publi, iterstat : ${publicidad}">
+
+
+							<div th:if="${iterstat.index}== 0" class="carousel-item active">
+								<img th:src="@{/uploads/img-banner/}+ ${publi.archivo}"
+									alt="Slide" th:id="'img'+${iterstat.index}" title="Some text">
+							</div>
+							<div th:if="${iterstat.index}!= 0" class="carousel-item">
+								<img th:src="@{/uploads/img-banner/}+ ${publi.archivo}"
+									alt="Slide" th:id="'img'+${iterstat.index}" title="Some text">
+							</div>
+
+						</th:block>
+
+					</div>
+
+					<a href="#principal-carousel" class="carousel-control-prev"
+						data-slide="prev"> <span class="carousel-control-prev-icon"
+						aria-hidden="true"></span> <span class="sr-only">Anterior</span>
+					</a> <a href="#principal-carousel" class="carousel-control-next"
+						data-slide="next"> <span class="carousel-control-next-icon"
+						aria-hidden="true"></span> <span class="sr-only">Siguiente</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row page-header">
+			<div class="col-lg-12">
+				<h2 class="text text-center">
+					<span class="badge badge-danger">EN CARTELERA</span>
+
+				</h2>
+				<form th:action="@{/buscar}" class="form-inline" method="post">
+					<div class="form-group">
+						<label for="fecha">Fecha: </label> <select id="fecha" name="fecha"
+							class="form-control">
+
+							<option th:each="lista: ${fechas}" th:value="${lista}"
+								th:selected="(${lista} == ${fechaBusqueda})" th:utext="${lista}" />
+						</select>
+					</div>
+					<button type="submit" class="btn btn-primary">Filtrar</button>
+				</form>
+			</div>
+		</div>
+		<br> <br>
+		<div class="container marketing">
+			<!-- Columns of text below the carousel -->
+			<div class="row  d-flex justify-content-between align-items-center">
+
+				<div th:each="pelicula: ${peliculas}">
+					<div
+						class="card mb-4 bg-dark  d-flex justify-content-between align-items-center">
+						<img class="img-rounded mt-4"
+							th:src="@{/uploads/img-peliculas/}+ ${pelicula.imagen}"
+							alt="Generic placeholder image" width="150" height="200">
+						<div class="card-body">
+							<div class="d-flex justify-content-between align-items-center">
+								<h2 style="" class="badge badge-success "
+									th:text="${pelicula.titulo}"></h2>
+								<h2 class="badge badge-secondary"
+									th:text="${pelicula.clasificacion}"></h2>
+							</div>
+							<div class="d-flex justify-content-between align-items-center">
+
+								<span class="badge badge-danger"
+									th:text="${pelicula.duracion}+ ' min'"></span> <span
+									class="badge badge-warning" th:text="${pelicula.genero}"></span>
+
+							</div>
+
+							<div class="d-flex justify-content-between align-items-center">
+
+								<div class="btn-group mt-2">
+									<a class="btn btn-sm btn-primary"
+										th:href="@{/consultarHorarios/}+${pelicula.id}+'/'+${fechaBusqueda}"
+										role="button">Consulta Horarios &raquo;</a>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		
+
+		</div>
+		<!-- /.container -->
+
+		<!-- Marketing messaging -->
+		<!-- 		<div class="container marketing">
+
+			<div class="row">
+
+				<div class="col-xs-12 col-sm-6 col-md-3">
+					<img class="img-rounded" src="images/estreno1.png"
+						alt="Generic placeholder image" width="150" height="200">
+					<h4>En este Rincón del Mundo</h4>
+					<h4>
+						<span class="label label-default">A</span> <span
+							class="label label-default">130 min</span> <span
+							class="label label-default">Drama</span>
+					</h4>
+					<p>
+						<a class="btn btn-sm btn-primary" href="#" role="button">Consulta
+							Horarios &raquo;</a>
+					</p>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-3">
+					<img class="img-rounded" src="images/estreno2.png"
+						alt="Generic placeholder image" width="150" height="200">
+					<h4>Logan: Wolverine</h4>
+					<h4>
+						<span class="label label-default">C</span> <span
+							class="label label-default">135 min</span> <span
+							class="label label-default">Acción</span>
+					</h4>
+					<p>
+						<a class="btn btn-sm btn-primary" href="#" role="button">Consulta
+							Horarios &raquo;</a>
+					</p>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-3">
+					<img class="img-rounded" src="images/estreno3.png"
+						alt="Generic placeholder image" width="150" height="200">
+					<h4>Fragmentado</h4>
+					<h4>
+						<span class="label label-default">B15</span> <span
+							class="label label-default">118 min</span> <span
+							class="label label-default">Thriller</span>
+					</h4>
+					<p>
+						<a class="btn btn-sm btn-primary" href="#" role="button">Consulta
+							Horarios &raquo;</a>
+					</p>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-3">
+					<img class="img-rounded" src="images/estreno4.png"
+						alt="Generic placeholder image" width="150" height="200">
+					<h4>Kong La Isla Calavera</h4>
+					<h4>
+						<span class="label label-default">B</span> <span
+							class="label label-default">118 min</span> <span
+							class="label label-default">Acción y aventura</span>
+					</h4>
+					<p>
+						<a class="btn btn-sm btn-primary" href="#" role="button">Consulta
+							Horarios &raquo;</a>
+					</p>
+				</div>
+
+			</div>
+
+			<div class="page-header">
+				<h2 class="text text-center">
+					<span class="label label-success">Noticias y novedades</span>
+				</h2>
+			</div>
+
+			<div class="row">
+
+				<div class="col-sm-12 blog-main">
+
+					<div class="blog-post">
+						<h3 class="blog-post-title">Julia Roberts protagonizará The
+							Bookseller</h3>
+
+						<p class="blog-post-meta">
+							<span class="label label-danger">Publicado: 16-06-2017</span>
+						</p>
+						<p>
+							La novela de Cynthia Swanson <span style="color: #0000ff;"><strong>The
+									Bookseller</strong></span> ser&aacute; llevada al cine con <span
+								style="color: #0000ff;">Julia Roberts (Los Pitufos: La
+								aldea Escondida)</span> como protagonista.<br />
+							<br />La historia est&aacute; ambientada en los sesenta y su
+							protagonista es una mujer soltera, Kitty Miller, que lleva una
+							librer&iacute;a. Sue&ntilde;a con una vida alternativa en la que
+							ha encontrado el amor y est&aacute; casada y con hijos, pero la
+							l&iacute;nea que separa realidad y ficci&oacute;n comienza a
+							estar demasiado dispersa para que la distinga.<br />
+							<br />Seg&uacute;n informa <span style="color: #ff0000;"><strong>Moviehole</strong></span>
+							Roberts tambi&eacute;n producir&aacute; la pel&iacute;cula junto
+							a Lisa Gillan y Marisa Yeres Hill.
+						</p>
+
+						<hr class="featurette-divider">
+					</div>
+
+					<div class="blog-post">
+						<h3 class="blog-post-title">Bob Esponja: tercera película y
+							temporada 12</h3>
+						<p class="blog-post-meta">
+							<span class="label label-danger">Publicado: 15-06-2017</span>
+						</p>
+
+						<p>
+							<strong><span style="color: #ff0000;">Nickelodeon
+									y productor de SpongeBob Square Pants confirman temporada 12 de
+									52 episodios y tercera pel&iacute;cula pr&oacute;ximamente. </span></strong>
+						</p>
+						<p>
+							<strong>&iexcl;Calamardo est&aacute; enojado!Bob
+								Esponja: tercera pel&iacute;cula y temporada 12</strong>
+						</p>
+						<p>Nickelodeon y productor de SpongeBob Square Pants confirman
+							temporada 12 de 52 episodios y tercera pel&iacute;cula
+							pr&oacute;ximamente. &iexcl;Calamardo est&aacute; enojado!.</p>
+						<p>A lado de cierta Pi&ntilde;a (debajo del mar), Calamardo
+							debe estar de muy mal humor, pues hay Bob Esponja para rato...
+							&iexcl;y por partida doble!. Por un lado, Vincent Waller (The Ren
+							&amp; Stimpy Show), artista, productor, escritor y supervisor
+							creativo de SpongeBob Squarepants anunci&oacute; con un divertido
+							dibujo desde su cuenta de Twitter que, antes de que se estrene
+							siquiera la temporada 11 de la serie animada, se ha confirmado ya
+							la n&uacute;mero 12, &iexcl;que constar&aacute; de 52 episodios
+							(recuerden que cada emisi&oacute;n consta de 2 aventuras)!</p>
+
+						<hr class="featurette-divider">
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+	</div>
+ -->
+		<!-- FOOTER -->
+		<footer th:replace="layout/menu :: footer"> </footer>
+</body>
+</html>

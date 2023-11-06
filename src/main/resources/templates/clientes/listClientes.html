@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<a th:href="@{/clientes/form}" class="btn btn-success" role="button"
+			title="NuevoCliente">Adicionar</a><br>
+		<br>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th>Nº</th>
+					<th>Nit</th>
+					<th>Nombre</th>
+					<th>Apellido P.</th>
+					<th>Apellido M.</th>
+					<th>Fecha</th>
+					<th>Estado</th>
+					<th>Opciones</th>
+				</tr>
+				 <tr th:each="cliente,iterStat: ${clientes}" th:class="${iterStat.count}? 'count'">
+				<td th:text="${iterStat.count}"></td>
+					<td th:text="${cliente.nit}"></td>
+					<td th:text="${cliente.nombre}"></td>
+					<td th:text="${cliente.apellido1}"></td>
+					<td th:text="${cliente.apellido2}"></td>
+					<td  th:text="${#dates.format(cliente.fecha, 'dd-MMMM-yyyy')}"></td>
+					<td><span th:if="${cliente.estado == true}" th:text="Activo"
+						class="label label-success"></span>
+						<span th:if="${cliente.estado != true}" th:text="Inactivo"
+						class="label label-success"></span>
+						
+						</td>
+					
+					<td>
+						<a	th:href="@{/clientes/form/} + ${cliente.id}"
+						class="btn btn-success btn-sm" role="button" title="Edit"><span
+							class="glyphicon glyphicon-pencil">Modificar</span></a> 
+						<a th:if="${cliente.estado == true}" onclick="return confirm('Estas seguro que desea eliminar?');"
+						th:href="@{/clientes/eliminar/} + ${cliente.id}"
+						class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
+							class="glyphicon glyphicon-trash">Eliminar</span></a>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+
+</body>
+</html>

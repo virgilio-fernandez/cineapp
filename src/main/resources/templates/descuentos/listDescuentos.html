@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<a th:href="@{/descuentos/form}" class="btn btn-success" role="button"
+			title="Nueva Pelicula">Adicionar</a><br>
+		<br>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th>Nº</th>
+					<th>Nombre</th>
+					<th>Porcentaje</th>
+					<th>Estatus</th>
+					<th>Opciones</th>
+				</tr>
+				<tr th:each="des,iterStat: ${descuentos}" th:class="${iterStat.count}? 'count'">
+				<td th:text="${iterStat.count}"></td>
+					<td th:text="${des.nombre}"></td>
+					
+					<td th:text="${des.porcentaje}+' %'"></td>
+					
+					<td><span th:if="${des.estado == true}" th:text="Activo"
+						class="label label-success"></span>
+						<span th:if="${des.estado != true}" th:text="Inactivo"
+						class="label label-success"></span>
+					<td th:if="${des.nombre}!='Ninguno'"> 
+						<a	th:href="@{/descuentos/form/} + ${des.id}"
+						class="btn btn-success btn-sm" role="button" title="Edit"><span
+							class="glyphicon glyphicon-pencil" >Modificar</span></a> 
+						<a th:if="${des.estado == true}"
+						th:href="@{/descuentos/eliminar/} + ${des.id}"
+						class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
+							class="glyphicon glyphicon-trash" >Eliminar</span></a></td>
+					<td th:if="${des.nombre}=='Ninguno'"> </td>
+				</tr>
+
+			</table>
+		</div>
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+
+</body>
+</html>

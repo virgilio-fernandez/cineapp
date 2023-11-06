@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/usuarios/save}" th:object="${usuario}"
+			method="post">
+			<div class="row"><div class="col-sm-2"></div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Roles.</label> <br> <select required id="roles" name="roles"
+							class="form-control input-lg" multiple="multiple">
+							<option
+								th:selected="('ROLE_ADMINISTRADOR' == ${rol1} or 'ROLE_ADMINISTRADOR' == ${rol2})"
+								th:value="ROLE_ADMINISTRADOR" th:utext="ADMINISTRADOR" />
+							<option
+								th:selected="('ROLE_CAJERO' == ${rol1} or 'ROLE_CAJERO' == ${rol2})"
+								th:value="ROLE_CAJERO" th:utext="CAJERO" />
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="nombre">Direccion</label> <input required
+							th:field="*{direccion}" type="text" class="form-control"
+							name="direccion" id="direccion"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('direccion')}"
+							th:errors="*{direccion}"></small>
+					</div>
+				</div>
+			</div>
+			<div class="row"><div class="col-sm-2"></div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nit">Nombre</label> <input required th:field="*{nombre}"
+							type="text" class="form-control" name="nombre" id="nombre"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="nombre">Email</label> <input required th:field="*{email}"
+							type="email" class="form-control" name="email" id="email"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+
+					</div>
+				</div>
+			</div>
+			<div class="row"><div class="col-sm-2"></div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="nombre">Apellido P.</label> <input required
+							th:field="*{apellido1}" type="text" class="form-control"
+							name="apellido1" id="apellido1"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('apellido1')}"
+							th:errors="*{apellido1}"></small>
+
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estado</label> <select
+							th:field="*{estado}" id="genero" name="estatus"
+							class="form-control">
+							<option value="1">Activo</option>
+							<option value="0">Inactivo</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row"><div class="col-sm-2"></div>
+				<div class="col-sm-5">
+					<div class="form-group">
+						<label for="nombre">Apellido M.</label> <input required
+							th:field="*{apellido2}" type="text" class="form-control"
+							name="apellido2" id="apellido2"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('apellido2')}"
+							th:errors="*{apellido2}"></small>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nombre">Login</label> <input th:field="*{username}" required
+							type="text" class="form-control" name="username" id="username"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+					</div>
+				</div>
+			</div>
+			<div class="row"> <div class="col-sm-2"></div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="nombre">Cedula</label> <input th:field="*{cedula}" required
+							type="text" class="form-control" name="cedula" id="cedula"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}"></small>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="nombre">Password</label> <input th:field="*{password}" required
+							type="password" class="form-control" name="password"
+							id="password" th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+					</div>
+				</div>
+			</div>
+			<div class="row"><div class="col-sm-2"></div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="nombre">Telefono</label> <input th:field="*{telefono}" required
+							type="number" class="form-control" name="telefono" id="telefono"
+							th:errorclass="'form-control alert-danger'" /> <small
+							class="form-text text-danger"
+							th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-5"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+
+
+
+
+
+
+			<input type="hidden" th:field="*{id}">
+
+
+
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script th:replace="usuarios/js/selectUsuario :: javascript"></script>
+	<script>
+		$(function() {
+			$("#fechaEstreno").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+	</script>
+</body>
+</html>

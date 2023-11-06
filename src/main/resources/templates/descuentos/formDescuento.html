@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/descuentos/save}" th:object="${descuento}"
+			method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="titulo">Nombre</label> <input th:field="*{nombre}"
+							type="text" class="form-control" name="nombre" id="nombre"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="porcentaje">Porcentaje %</label> <input
+							th:field="*{porcentaje}" type="number" class="form-control"
+							name="porcentaje" id="porcentaje" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estado</label> <select th:field="*{estado}"
+							id="estado" name="estado" class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			
+
+
+			<input type="hidden" th:field="*{id}"> 
+
+
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		
+	</script>
+</body>
+</html>

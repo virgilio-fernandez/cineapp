@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<a th:href="@{/banner/form}" class="btn btn-success" role="button"
+			title="Nueva Pelicula">Adicionar</a><br> <br>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr><th>Nº</th>
+					<th>Titulo</th>
+					<th>fecha</th>
+					<th>Archivo</th>
+					<th>Estado</th>
+					<th>Usuario</th>
+					<th>Opciones</th>
+
+				</tr>
+				 <tr th:each="banner,iterStat: ${banner}" th:class="${iterStat.count}? 'count'">
+				<td th:text="${iterStat.count}"></td>
+				
+					<td th:text="${banner.titulo}"></td>
+					<td th:text="${#dates.format(banner.fecha, 'dd-MMMM-yyyy')}"></td>
+					<td th:text="${banner.archivo}"></td>
+					<td><span th:if="${banner.estado == true}" th:text="Activo"
+						class="label label-success"></span> <span
+						th:if="${banner.estado != true}" th:text="Inactivo"
+						class="label label-success"></span></td>
+					<td th:text="${banner.usuario.username}"></td>
+
+					<td><a th:href="@{/banner/form/} + ${banner.id}"
+						class="btn btn-success btn-sm" role="button" title="Edit"><span
+							class="glyphicon glyphicon-pencil">Modificar</span></a> <a
+						th:href="@{/banner/eliminar/} + ${banner.id}"
+						class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
+							class="glyphicon glyphicon-trash">Eliminar</span></a></td>
+				</tr>
+
+			</table>
+		</div>
+
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script th:replace="peliculas/js/javascript :: javascript"></script>
+
+</body>
+</html>

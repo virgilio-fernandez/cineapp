@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/guardar}" th:object="${cine}" method="post"
+			enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nit">Nit</label> <input th:field="*{nit}"
+							type="number" class="form-control" name="nit" id="nit"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nombre">Nombre</label> <input th:field="*{nombre}"
+							type="text" class="form-control" name="nombre" id="nombre"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="direccion">Direccion</label> <input
+							th:field="*{direccion}" type="text" class="form-control"
+							name="direccion" id="direccion" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="email">Email</label> <input th:field="*{email}"
+							type="text" class="form-control" name="email" id="email"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="telefono">Telefono</label> <input th:field="*{telefono}"
+							type="number" class="form-control" name="telefono" id="telefono"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="file">Logo</label> <input type="file"
+							id="file" name="file" />
+						
+					</div>
+				</div>
+
+
+			</div>
+			<input type="hidden" th:field="*{id}">
+
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<a href="/" class="btn btn-danger"  >Cancelar<a/>
+				</div>
+			</div>
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		$(function() {
+			$("#fechaEstreno").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+	</script>
+</body>
+</html>

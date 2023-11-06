@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Peliculas</title>
+</head>
+<body>
+	<h1 th:text="${titulo}"></h1>
+<form th:action="@{/save}" th:object="${pelicula}" method="post">
+	<input type="text" th:field="*{titulo}">
+	<input type="number"  th:field="*{duracion}">
+	<input type="submit" value="crear pelicula" >
+	
+	<input type="hidden" th:field="*{id}">
+	
+</form>
+</body>
+</html>

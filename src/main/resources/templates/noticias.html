@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+	<header th:replace="layout/menu :: header"></header>
+
+
+	<div class="container-fluid">
+
+
+		<div class="row">
+			<div class="col-12 mt-3">
+				<div class="carousel slide" id="principal-carousel"
+					data-ride="carousel">
+					<ol class="carousel-indicators">
+						<th:block th:each="publi, iterstat : ${publicidad}">
+							<li data-target="#principal-carousel"
+								th:id="'li'+${iterstat.index}"
+								th:attr="data-slide-to=${iterstat.index}"
+								th:class="${iterstat.index}== 0  ? 'active':''"></li>
+
+						</th:block>
+
+					</ol>
+
+					<div class="carousel-inner">
+						<th:block th:each="publi, iterstat : ${publicidad}">
+
+
+							<div th:if="${iterstat.index}== 0" class="carousel-item active">
+								<img th:src="@{/uploads/img-banner/}+ ${publi.archivo}"
+									alt="Slide" th:id="'img'+${iterstat.index}" title="Some text">
+							</div>
+							<div th:if="${iterstat.index}!= 0" class="carousel-item">
+								<img th:src="@{/uploads/img-banner/}+ ${publi.archivo}"
+									alt="Slide" th:id="'img'+${iterstat.index}" title="Some text">
+							</div>
+
+						</th:block>
+
+					</div>
+
+					<a href="#principal-carousel" class="carousel-control-prev"
+						data-slide="prev"> <span class="carousel-control-prev-icon"
+						aria-hidden="true"></span> <span class="sr-only">Anterior</span>
+					</a> <a href="#principal-carousel" class="carousel-control-next"
+						data-slide="next"> <span class="carousel-control-next-icon"
+						aria-hidden="true"></span> <span class="sr-only">Siguiente</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	
+		<div class="container marketing">
+			<!-- Columns of text below the carousel -->
+			
+			<div class="page-header">
+				<h2 class="text text-center">
+					<span class="badge badge-danger">NOTICIAS Y NOVEDADES</span>
+				</h2>
+			</div>
+			<br> <br>
+
+			<div class="row">
+
+				<div class="col-sm-12 blog-main">
+					<th:block th:each="noticia, iterstat : ${noticias}">
+
+						<div class="blog-post">
+							<h3 class="blog-post-title" th:text="${noticia.titulo}"></h3>
+
+							<p class="blog-post-meta">
+								<span class="badge badge-danger"   th:text="'Publicado: '+ ${#dates.format(noticia.fecha, 'dd-MMMM-yyyy')} "></span>
+							</p>
+							
+							<div th:utext="${noticia.detalle}"></div>
+
+							
+
+							<hr>
+						</div>
+					</th:block>
+
+				</div>
+			</div>
+
+		</div>
+	
+		<!-- FOOTER -->
+		<footer th:replace="layout/menu :: footer"> </footer>
+</body>
+</html>

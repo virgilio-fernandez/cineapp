@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+
+
+
+
+
+	<div >
+		<div class="row"></div>
+
+		<div class="row">
+
+			<table th:fragment="resultsList" class="table table-sm borderless">
+				<tr>
+					
+					<th colspan="2">Descripcion de la Pelicula</th>
+					
+
+				</tr>
+				<tr>
+					
+					<td colspan="2">
+					
+						<img class="img-rounded ml-5" th:src="@{/uploads/img-peliculas/}+ ${horario.peliculaTipo.pelicula.imagen}" alt="Generic placeholder image" width="155" height="220">
+					</td>
+					
+
+				</tr>
+	 			<tr >
+					<td>Duracion</td>
+					<td th:text="${horario.peliculaTipo.pelicula.duracion}+ ' min.'"></td>
+				</tr>
+				<tr >
+					<td>Genero</td>
+					<td th:text="${horario.peliculaTipo.pelicula.genero}"></td>
+				</tr>
+				<tr >
+					<td>Duracion</td>
+					<td th:text="${horario.peliculaTipo.pelicula.duracion}"></td>
+				</tr>
+				<tr >
+					<td>Clasificacion</td>
+					<td th:text="${horario.peliculaTipo.pelicula.clasificacion}"></td>
+				</tr>
+				<tr >
+					<td>Tipo</td>
+					<td th:text="${horario.peliculaTipo.tipo.nombre}"></td>
+				</tr>
+				<tr >
+					<td>Audio</td>
+					<td th:text="${horario.peliculaTipo.tipo.audio}"></td>
+				</tr>
+				<tr>
+					<td>Sala</td>
+					<td th:text="${horario.sala.nombre}"></td>
+				</tr>
+				<tr>
+					<td>Precio</td>
+					<td th:text="${horario.precio}"></td>
+				</tr>
+				<tr>
+					<td>Hora</td>
+					<td th:text="${horario.hora}"></td>
+				</tr>
+				<tr>
+					<td>Asientos Disponibles</td>
+					<td th:text="${horario.asientosDisponibles}"></td>
+				</tr>
+
+
+			</table>
+		</div>
+
+	
+	</div>
+
+
+
+	<hr class="featurette-divider">
+
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		
+	</script>
+
+
+</body>
+</html>

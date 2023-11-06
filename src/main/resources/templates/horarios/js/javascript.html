@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<script type="text/javascript" th:fragment="javascript">
+		$(document).ready(function() {
+			// colocar unos input hidden que contenga la fecha y sala enviados desde el servidor
+			filtrar();
+
+		});
+		function filtrar() {
+
+			var fecha = $("#fecha").val();
+			var sala = $('#sala').val()
+			var serial = "fecha=" + fecha + "&sala=" + sala;
+			if (fecha != '') {
+				$(function() {
+					$("#mostrar").load('/horarios/listarHorarios', serial);
+
+				});
+			}
+
+		}
+
+	/*	function alerta(id) {
+
+			var opcion = confirm("seguro que desea eliminar?");
+			if (opcion == true) {
+				$.ajax({
+					url : "/horarios/eliminar/" + id,
+					dataType : "json",
+					data : {
+						id : id
+					},
+					success : function(data) {
+						filtrar();
+					},
+					error : function(jqXhr, textStatus, errorThrown) {
+						//	alert("El cliente no existe");
+
+					}
+				});
+			}
+
+		}
+	*/
+	</script>
+
+</body>
+</html>

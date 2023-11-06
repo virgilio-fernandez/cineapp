@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class=" container-fluid ">
+		<div class="row ">
+			<div class="col-2">
+				<div id="mostrarDetalle"></div>
+
+			</div>
+			<div class="col-10 ">
+				<div class="container-fluid ">
+					<br>
+					
+
+					<h3 class="blog-title">
+						<span class="label label-success" th:text="${titulo}"> </span>
+					</h3>
+
+					<form  id="formVenta" th:action="@{/ventas/save}"
+						th:object="${venta}" method="post" enctype="multipart/form-data">
+
+						<div class="row">
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="nit">Nit</label> <input th:field="*{cliente.nit}"
+										type="number" class="form-control" name="nit" id="nit"
+										required="required" />
+
+								</div>
+							</div>
+							<div class="col-sm-1">
+								<div class="form-group">
+									<label for="busc" style="color: white;">clic</label> <input
+										class="btn btn-info" type="button" value="Buscar Cliente"
+										onClick="buscarCliente();">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="nombre">Cliente</label> <input disabled
+										th:field="*{cliente.nombre}" type="text" class="form-control"
+										name="nombre" id="nombre" required="required" />
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="apellidos">Apellido P</label> <input disabled
+										th:field="*{cliente.apellido1}" type="text"
+										class="form-control" name="apellido1" id="apellido1"
+										required="required" />
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label for="apellidos">Apellido M</label> <input disabled
+										th:field="*{cliente.apellido2}" type="text"
+										class="form-control" name="apellido2" id="apellido2"
+										required="required" />
+								</div>
+							</div>
+
+
+
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="idPelicula" class="control-label">Pelicula</label>
+									<select id="pelicula" name="pelicula" class="form-control">
+										<option th:each="peli: ${horarios}" th:value="${peli.id}"
+											th:utext="${peli.peliculaTipo.pelicula.titulo}+ '  ----  ' + ${peli.hora} + '  ----  ' + ${peli.sala.nombre}" />
+									</select>
+
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="boletos">Num de boletos</label> <input
+										type="number" class="form-control" name="boletos" id="boletos" />
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label for="idDescuento" class="control-label">Descuentos</label>
+									<select id="descuento" name="descuento" class="form-control">
+										<option th:each="des: ${descuentos}" th:value="${des.id}"
+											th:utext="${des.nombre}+ '  / ' + ${des.porcentaje}+'%'" />
+									</select>
+
+								</div>
+							</div>
+
+
+						</div>
+						<div class="row">
+							<div class="col-sm-1">
+								<input class="form-control btn btn-info" type="button" value="+"
+									id="add"> <input type="hidden" id="horarios">
+							</div>
+
+							<div class="col-sm-8">
+								<table id="tabla" class="table table-bordered">
+									<thead>
+										<tr>
+
+											<th>Pelicula</th>
+											<th>Precio</th>
+											<th>Cantidad</th>
+											<th>Descuento</th>
+											<th>subtotal</th>
+											<th>Borrar</th>
+
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-8"></div>
+							<div class="col-sm-1">
+
+								Total: <input disabled class="form-control" type="text"
+									id="total"> <input th:field="*{total}"
+									class="form-control" type="hidden" id="total2">
+									
+									<br>
+								Efectivo:<input class="form-control" type="text" id="efectivo"
+									onkeyup="calcularSaldo(this.value);" required="required"/> 
+									<input th:field="*{efectivo}" class="form-control" type="hidden" id="efectivo2">
+									<br> Cambio:<input
+									disabled class="form-control" type="text" id="saldo"> 
+									<input th:field="*{cambio}" class="form-control" type="hidden" id="saldo2">
+								   <br>
+
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-sm-5"></div>
+							<div class="col-sm-3">
+								<input type="hidden" id="idcliente" th:field="*{cliente.id}">
+								<input type="hidden" id="numDetalles" name="numDetalles">
+								<input type="hidden" th:field="*{id}">
+								<button type="button" onclick="guardarVenta();"
+									class="btn btn-success">Guardar</button>
+								<input class="btn btn-danger" type="button" value="Cancelar"
+									onClick="history.go(-1);">
+
+							</div>
+
+						</div>
+
+
+					</form>
+
+
+
+
+
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	<hr class="featurette-divider">
+
+	<!-- The Modal -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Adicionar Cliente</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					<form id="add-cliente" th:action="@{/clientes/save}" method="post">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="add-nit">Nit</label> <input type="number"
+										class="form-control" name="add-nit" id="add-nit"
+										required="required" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="add-nombre">Nombre</label> <input type="text"
+										class="form-control" name="add-nombre" id="add-nombre"
+										required="required" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="add-apellidos">Apellidos P</label> <input
+										type="text" class="form-control" name="add-apellido1"
+										id="add-apellido1" required="required" />
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="add-apellidos">Apellido M</label> <input
+										type="text" class="form-control" name="add-apellido2"
+										id="add-apellido2" required="required" />
+								</div>
+							</div>
+
+						</div>
+						<input type="hidden" name="add-id" id="add-id">
+					</form>
+
+
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal"
+						onClick="guardarCliente();">Guardar</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script th:replace="ventas/js/selectPelicula :: javascript"></script>
+</body>
+</html>

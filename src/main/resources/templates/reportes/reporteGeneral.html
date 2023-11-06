@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+<form id="formReporte" th:action="@{/reportes/imprimirReporte}" method="post">
+	<div class="container">
+
+		<div class="page-header">
+			<br> <br>
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+
+				<div class="row">
+					<div class="col-sm-5">
+						<div class="form-group">
+							<table class="table">
+								<tr>
+									<td class="text-right">Fechas:</td>
+									<td><input type="text" id="date_range" name="date_range"
+										class="form-control"></td>
+
+								</tr>
+							</table>
+
+
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<table class="table">
+								<tr>
+									<td><input checked="true" type="radio" class="filtro"
+										name="filtro" value="todas"></td>
+									<td>Todas</td>
+
+								</tr>
+							</table>
+
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<table class="table">
+								<tr>
+
+									<td><input type="radio" class="filtro" name="filtro"
+										value="sinAnular"></td>
+									<td>Sin anular</td>
+
+								</tr>
+							</table>
+
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="form-group">
+							<table class="table">
+								<tr>
+
+									<td><input type="radio" class="filtro" name="filtro"
+										value="anuladas"></td>
+									<td>Anuladas</td>
+									<td></td>
+									<td></td>
+								
+								</tr>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			
+		</div>
+
+		<div class="row">
+			<div class="sm-2 ml-5">
+				<input id="filtrar" type="button" class="form-control btn btn-info"
+					value="Filtrar">
+
+			</div>
+
+		</div>
+		
+		<div class="container">
+			<br>
+		<div class="sm-12" id="mostrar"></div>
+
+</div>
+</div>
+
+</form>
+
+		<hr class="featurette-divider">
+
+	
+
+	
+
+
+
+
+
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+	<script>
+		$(function() {
+			$('#date_range').daterangepicker(
+					{
+						"locale" : {
+							"format" : "DD-MM-YYYY",
+							"separator" : " / ",
+							"applyLabel" : "Guardar",
+							"cancelLabel" : "Cancelar",
+							"fromLabel" : "Desde",
+							"toLabel" : "Hasta",
+							"customRangeLabel" : "Personalizar",
+							"daysOfWeek" : [ "Do", "Lu", "Ma", "Mi", "Ju",
+									"Vi", "Sa" ],
+							"monthNames" : [ "Enero", "Febrero", "Marzo",
+									"Abril", "Mayo", "Junio", "Julio",
+									"Agosto", "Setiembre", "Octubre",
+									"Noviembre", "Diciembre" ],
+							"firstDay" : 1
+						},
+						"startDate" : "01-01-2019",
+						"endDate" : "30-11-2019",
+						"opens" : "center"
+					});
+		});
+		$('#filtrar').click(function() {
+			listarTodas();
+
+		});
+		function cambio(){
+			if($("#pelicula").val() != 'todas'){
+				var cadena = $("#date_range").val();
+				var filtro = $('input:radio[name=filtro]:checked').val()
+				var idPelicula = $("#pelicula").val();
+				var serial = "fechas=" + cadena + "&filtro=" + filtro+"&idPelicula=" +idPelicula ;
+				$(function() {
+					$("#listarPorPelicula").load('/reportes/listarPorPelicula', serial);
+
+				});
+			}else{
+				listarTodas();
+			}
+			
+		}
+		function listarTodas(){
+			var cadena = $("#date_range").val();
+			var filtro = $('input:radio[name=filtro]:checked').val()
+			var serial = "fechas=" + cadena + "&filtro=" + filtro;
+			$(function() {
+				$("#mostrar").load('/reportes/listar', serial);
+
+			});
+			
+		}
+	</script>
+</body>
+</html>

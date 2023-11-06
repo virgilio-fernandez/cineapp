@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<script type="text/javascript" th:fragment="javascript">
+		$(document)
+				.ready(
+						function() {
+							
+							var serial = "idHorario=" + $("#pelicula").val();
+							$(function() {
+								
+								$("#mostrarDetalle").load('/ventas/mostrarDetalle', serial);
+
+							});
+							
+							$('#pelicula').select2();
+
+							$("#pelicula").change(function() {
+									alert($("#pelicula").val());
+									var serial = "idHorario=" + $("#pelicula").val();
+									$(function() {
+										
+										$("#mostrarDetalle").load('/ventas/mostrarDetalle', serial);
+
+									});
+							});
+							
+								
+							$('#add').click(function() {
+								if($("#boletos").val()=='0'){
+									$.alert('Boletos Agotados', {
+										autoClose:true,
+										position: ['center', [-0.42, 0]],
+										type:'danger',		
+										});
+
+									
+								
+								}else if($("#boletos").val()==''){
+									$.alert('Ingresar el numero de boletos', {
+										autoClose:true,
+										position: ['center', [-0.42, 0]],
+										type:'danger',		
+										});
+
+									
+								
+								}else{
+									
+									
+									var idHorario = $("#pelicula").val();
+									var numBoletos=$("#boletos").val();
+									
+									$.ajax({
+										url : "/ventas/buscarHorario/" + idHorario,
+										dataType : "json",
+										data : {
+											term : idHorario
+										},
+										success : function(data) {				
+										
+											if(data.asientosDisponibles< numBoletos){
+												$.alert('Error! Boletos Disponibles:'+data.asientosDisponibles, {
+													autoClose:true,
+													position: ['center', [-0.42, 0]],
+													type:'danger',		
+													});
+												$("#boletos").val(data.asientosDisponibles);
+											}else{
+												verificarFilaRepetida(data);
+											}
+											
+										},
+									});
+								
+									
+									
+									
+								}
+						
+							});
+
+							
+
+							
+							$("#tabla").on("click", ".del", function() {
+								$(this).parents("tr").remove();
+								ordenar();
+
+							});
+
+							$("#mi-boton").click(function() {
+								var nFilas = $("#tabla tbody tr").length;
+								//  var nColumnas = $("#mi-tabla tr:last td").length;
+								//   var msg = "Filas: "+nFilas+" - Columnas: "+nColumnas;
+								alert(nFilas);
+							});
+							
+						});
+		
+		function verificarFilaRepetida(data){
+			var nFilas = $("#tabla tbody tr").length;
+			var idHorario = $("#pelicula").val();
+			var descuento = $("#descuento").val();
+			var saltar=0;
+			var nFilaMod1=0;
+			var numBoletos=$("#boletos").val();
+			
+
+			if(nFilas>=1){
+				$("#tabla tbody tr td input[type=hidden]").each(function() {
+					if ($(this).attr("class") =='oculto1' ) {
+						nFilaMod1++;
+						if ($(this).attr("value") == idHorario) {
+						
+							var cant=$("#"+nFilaMod1).val();
+						
+							var suma=parseInt(cant) + parseInt(numBoletos);
+							
+							if(suma > data.asientosDisponibles){
+								saltar=1;
+								$.alert('Error! Boletos disponibles:'+(parseInt(data.asientosDisponibles)-parseInt(cant)), {
+									autoClose:true,
+									position: ['center', [-0.42, 0]],
+									type:'danger',		
+									});
+								$("#boletos").val((parseInt(data.asientosDisponibles)-parseInt(cant)));
+							}else{
+								if ($("#desc"+nFilaMod1).attr("value") == descuento) {
+									saltar=1;
+									modificarFila(nFilaMod1);
+								}
+							}		
+							
+						}
+					}
+				});
+				if(saltar==0){
+					agregar();
+				}
+				
+			}else{
+				agregar();
+			}
+						
+		}
+		
+
+		
+		var cont = 0;
+		function agregar() {
+	
+			if($("#boletos").val()==''){
+				alert("Ingresar el numero de boletos");
+			}else{
+				cont++;
+				var fila = '<tr>'
+						+ '</td><td><input class="oculto1" type="hidden" id="horario'+cont+'" name="horario'+cont+'"><input class="detalle" disabled type="text"  id="detalle'+cont+'"></td>'
+						+ '</td><td><input class="oculto3" type="hidden" id="prec'+cont+'" name="prec'+cont+'"><input class="precio"  disabled type="text" id="precio'+cont+'" name="precio'+cont+'"></td>'
+						+ '</td><td><input onchange="aumentarSubtotal(this.id);" onkeyup="aumentarSubtotal(this.id);"   type="number" class="cantidad" id="'+cont+'" name="cantidad'+cont+'"></td>'
+						+ '</td><td><input class="oculto2" type="hidden" id="desc'+cont+'" name="desc'+cont+'"><input class="descuento" disabled type="text" id="descuento'+cont+'" name="descuento'+cont+'"></td>'
+						+ '</td><td><input class="oculto4" type="hidden" id="subt'+cont+'" name="subt'+cont+'"><input class="subtotal" disabled type="text" " id="subtotal'+cont+'" name="subtotal'+cont+'"></td>'
+						+ '<td><input class="del form-control btn btn-danger" type="button"  value="X"></td></tr>';
+				$('#tabla').append(fila);
+				adicionar(cont);
+			}
+			
+
+			
+		//modificar estos para id horarios o talves no sea necesario
+/*			var num = $("#horarios").val();
+			var num2 = $("#pelicula").val();
+			if (num == '') {
+				$("#horarios").val(num2);
+			} else {
+				$("#horarios").val(num + "," + num2);
+			}
+
+			alert($("#horarios").val());
+*/
+		}
+		function ordenar() {
+			var val1 = 1;
+			var val2 = 1;
+			var val3 = 1;
+			var val4 = 1;
+			var val5 = 1;
+			var val6 = 1;
+			var val7 = 1;
+			var val8 = 1;
+			$("#tabla tbody tr td input[type=text]").each(function() {
+
+				if ($(this).attr("class") == 'precio') {
+					$(this).attr('name', "precio" + val1);
+					$(this).attr('id', "precio" + val1);
+					val1 = parseInt(val1) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=number]").each(function() {
+
+				if ($(this).attr("class") == 'cantidad') {
+					$(this).attr('name', "cantidad" + val2);
+					$(this).attr('id', val2);
+					val2 = parseInt(val2) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=text]").each(function() {
+
+				if ($(this).attr("class") == 'descuento') {
+					$(this).attr('name', "descuento" + val3);
+					$(this).attr('id', "descuento" + val3);
+					val3 = parseInt(val3) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=text]").each(function() {
+
+				if ($(this).attr("class") == 'subtotal') {
+					$(this).attr('name', "subtotal" + val4);
+					$(this).attr('id', "subtotal" + val4);
+					val4 = parseInt(val4) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=hidden]").each(function() {
+
+				if ($(this).attr("class") == 'oculto1') {
+					$(this).attr('name', "horario" + val5);
+					$(this).attr('id', "horario"+ val5);
+					val5 = parseInt(val5) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=hidden]").each(function() {
+
+				if ($(this).attr("class") == 'oculto2') {
+					$(this).attr('name', "desc" + val6);
+					$(this).attr('id', "desc"+ val6);
+					val6 = parseInt(val6) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=hidden]").each(function() {
+
+				if ($(this).attr("class") == 'oculto3') {
+					$(this).attr('name', "prec" + val7);
+					$(this).attr('id', "prec"+ val7);
+					val7= parseInt(val7) + parseInt(1);
+				}
+
+			});
+			$("#tabla tbody tr td input[type=hidden]").each(function() {
+
+				if ($(this).attr("class") == 'oculto4') {
+					$(this).attr('name', "subt" + val8);
+					$(this).attr('id', "subt"+ val8);
+					val8 = parseInt(val8) + parseInt(1);
+				}
+
+			});
+			
+			cont=$("#tabla tbody tr").length;
+			numeroDetalles();
+
+		}
+		function adicionar(cont) {
+			
+			var nBoletos = $("#boletos").val();
+			var idHorario = $("#pelicula").val();
+			var descuento = $("#descuento").val();
+			
+
+			
+			$.ajax({
+				url : "/ventas/buscarHorario/" + idHorario,
+				dataType : "json",
+				data : {
+					term : idHorario
+				},
+				success : function(data) {
+					$("#precio" + cont).val(data.precio);
+					$("#prec" + cont).val(data.precio);
+					$("#"+cont).val(nBoletos);
+				//	$("#descuento"+ cont).val(descuento);
+					$("#subtotal" + cont).val(
+							parseFloat(data.precio) * parseFloat(nBoletos));
+					$("#subt" + cont).val(
+							parseFloat(data.precio) * parseFloat(nBoletos));
+					$("#detalle" + cont).val(
+							data.peliculaTipo.pelicula.titulo + "/ "
+									+ data.peliculaTipo.tipo.nombre + "/ "
+									+ data.peliculaTipo.tipo.audio + "/ "
+									+ data.peliculaTipo.tipo.calidad)+ "/ sala "+ data.sala.nombre;
+					$("#horario"+cont).val(data.id);
+					$("#boletos").val('');
+					var subtotal=parseFloat(data.precio) * parseFloat(nBoletos);
+					
+					adicionar2(cont,subtotal,descuento);
+				}, error: function( jqXhr, textStatus, errorThrown ){
+		        	alert("error metodo adicionar");
+		        	
+		        }
+			});
+			
+			
+			
+		}
+		function adicionar2(cont,subtotal,descuento) {
+			
+			$.ajax({
+				url : "/ventas/buscarDescuento/" + descuento,
+				dataType : "json",
+				data : {
+					term : descuento
+				},
+				success : function(data) {
+					
+					
+					$("#descuento"+ cont).val(data.nombre);
+					$("#desc"+ cont).val(data.id);
+					$("#subtotal" + cont).val(parseFloat(subtotal)-(parseFloat(subtotal)*(parseFloat(data.porcentaje)/100)));
+					$("#subt" + cont).val(parseFloat(subtotal)-(parseFloat(subtotal)*(parseFloat(data.porcentaje)/100)));
+					calcularTotal();
+					numeroDetalles();
+					
+				},
+			});
+			
+			
+		}
+		
+		function modificarFila(n) {
+			var descuento = $("#descuento").val();
+			if(descuento!=$("#desc"+ n).val()){
+				agregar();
+			}else{	
+				var nBoletos = $("#boletos").val();
+				
+				var nBoletos = $("#boletos").val();
+				var nBoletosAsig = $("#"+n).val();
+				var nTotalBoletos = parseInt(nBoletos)+parseInt(nBoletosAsig);
+				var precio = $("#precio"+n).val();
+				$("#precio" + n).val(precio);
+				$("#prec" + n).val(precio);
+				$("#" + n).val(nTotalBoletos);
+				//	$("#descuento"+cont).val(nBoletos);
+				$("#subtotal" + n).val(parseFloat(precio) * parseFloat(nTotalBoletos));
+				$("#subt" + n).val(parseFloat(precio) * parseFloat(nTotalBoletos));
+				$("#boletos").val('');
+			}
+			
+		}
+		function calcularTotal() {
+			var suma=0;
+			
+			$("#tabla tbody tr td input[type=text]").each(function() {
+				if ($(this).attr("class") == 'subtotal') {
+					
+					suma=parseFloat(suma)+parseFloat($(this).val());
+				}
+
+			});
+			$("#total").val(suma);
+			$("#total2").val(suma);
+		}
+		function calcularSaldo(efectivo) {
+			var total=$("#total").val();
+			$("#saldo").val(parseFloat(efectivo)-parseFloat(total));
+			$("#saldo2").val(parseFloat(efectivo)-parseFloat(total));
+			$("#efectivo2").val(parseFloat(efectivo));
+			
+		}
+		function buscarCliente() {
+			var nit=$("#nit").val();
+		
+			
+			$.ajax({
+				url : "/ventas/buscarCliente/" + nit,
+				dataType : "json",
+				data : {
+					term : nit
+				},
+				success : function(data) {
+					$.alert('El cliente encontrado', {
+						autoClose:true,
+						position: ['center', [-0.42, 0]],
+						type:'success',		
+						});
+					$("#idcliente").val(data.id);
+					$("#nombre").val(data.nombre);
+					$("#apellido1").val(data.apellido1);
+					$("#apellido2").val(data.apellido2);
+					
+				}, error: function( jqXhr, textStatus, errorThrown ){
+					$.alert('El cliente no existe', {
+						autoClose:true,
+						position: ['center', [-0.42, 0]],
+						type:'danger',		
+						});
+		        	$("#idcliente").val('');
+					$("#nombre").val('');
+					$("#apellido1").val('');
+					$("#apellido2").val('');
+				//	$("#nit").val('');
+					
+					$('.modal').modal('show');
+					$("#add-nit").val($("#nit").val());
+		        }
+			});
+			
+			
+		}
+		
+		function guardarCliente() {
+			var nit=$("#nit").val();
+		
+			dataSerialize = $("#add-cliente").serialize();
+			$.ajax({
+				url : "/ventas/guardarCliente",
+				dataType : "json",
+				data :dataSerialize,
+				success : function(data) {
+					$("#idcliente").val(data.id);
+					$("#nombre").val(data.nombre);
+					$("#apellido1").val(data.apellido1);
+					$("#apellido2").val(data.apellido2);
+					$("#nit").val(data.nit);
+					
+				}, error: function( jqXhr, textStatus, errorThrown ){
+		        	alert("error");
+		        }
+			});
+		
+			
+		}
+		
+		
+		function aumentarSubtotal(id){
+			
+			
+			var idHorario = $("#horario"+id).val();
+			var numBoletos=$("#"+id).val();
+			
+			$.ajax({
+				url : "/ventas/buscarHorario/" + idHorario,
+				dataType : "json",
+				data : {
+					term : idHorario
+				},
+				success : function(data) {				
+				
+						verificarFilaRepetida2(data,id)
+					
+					
+					
+				},
+			});
+				
+		}
+		function verificarFilaRepetida2(data,id){
+			var nFilas = $("#tabla tbody tr").length;
+			
+			var descuento = $("#desc"+id).val();
+			var saltar=0;
+			var nFilaMod1=0;
+			var numBoletos=$("#"+id).val();
+			
+			var idHorario = $("#horario"+id).val();
+			
+
+			if(nFilas>=1){
+				$("#tabla tbody tr td input[type=hidden]").each(function() {
+					if ($(this).attr("class") =='oculto1' ) {
+						nFilaMod1++;
+						if ($(this).attr("value") == idHorario) {
+							
+							if ($("#desc"+nFilaMod1).attr("value") != descuento) {
+								var cant=$("#"+nFilaMod1).val();
+								
+								var suma=parseInt(cant) + parseInt(numBoletos);
+								
+								if(suma > data.asientosDisponibles){
+									saltar=1;
+									$.alert('Error! Boletos disponibles:'+(parseInt(data.asientosDisponibles)-parseInt(cant)), {
+										autoClose:true,
+										position: ['center', [-0.42, 0]],
+										type:'danger',		
+										});
+									$("#"+id).val((parseInt(data.asientosDisponibles)-parseInt(cant)));
+								}else{
+									aumentarSubtotal2(id)
+								}		
+							}
+						
+							
+							
+						}
+					}else{
+						if(data.asientosDisponibles< numBoletos){
+							$.alert('Error! Boletos Disponibles:'+data.asientosDisponibles, {
+								autoClose:true,
+								position: ['center', [-0.42, 0]],
+								type:'danger',		
+								});
+							$("#"+id).val(data.asientosDisponibles);
+						}
+						
+					}
+				});
+				
+			}
+			
+			
+			
+			
+			
+		}
+		function aumentarSubtotal2(id){
+			
+			var nBoletos = $("#"+id).val();
+			var precio = $("#precio"+id).val();
+			var descuento = $("#desc"+id).val();
+		
+			$.ajax({
+				url : "/ventas/buscarDescuento/" + descuento,
+				dataType : "json",
+				data : {
+					term : descuento
+				},
+				success : function(data) {				
+				
+					var subtotal=parseFloat(precio) * parseFloat(nBoletos);
+					
+					$("#subtotal" + id).val(parseFloat(subtotal)-(parseFloat(subtotal)*(parseFloat(data.porcentaje)/100)));
+					$("#subt" + id).val(parseFloat(subtotal)-(parseFloat(subtotal)*(parseFloat(data.porcentaje)/100)));
+					calcularTotal();
+					
+				},
+			});
+			
+		}
+		
+		
+		function guardarVenta(){
+			if($("#nombre").val()=='' && $("#nombre").val()==''){
+				alert("debe ingresar un cliente");
+			}else{
+				if($("#numDetalles").val()=='' || $("#numDetalles").val()=='0'){
+					alert("detalle vacio")
+				}else{
+					document.getElementById('formVenta').submit();
+				}
+				
+			}
+		}
+		function numeroDetalles(){
+			var nFilas = $("#tabla tbody tr").length;
+			$("#numDetalles").val(nFilas);
+		}
+	</script>
+
+</body>
+</html>

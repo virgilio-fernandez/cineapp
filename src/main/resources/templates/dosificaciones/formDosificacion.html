@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/dosificacion/save}" th:object="${dosificacion}"
+			method="post">
+			<div class="row">
+
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nAutorizacion">Num. Aut</label> <input
+							th:field="*{nAutorizacion}" type="number" class="form-control"
+							name="nAutorizacion" id="nAutorizacion" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="llaveDosificacion">Llave de Doc:</label> <input
+							th:field="*{llaveDosificacion}" type="text" class="form-control"
+							name="llaveDosificacion" id="llaveDosificacion"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="fechaEmision">Fecha de emicion</label> <input
+							th:field="*{fechaEmision}" type="text" class="form-control hasDatepicker"
+							name="fechaEmision" id="fechaEmision" required="required" />
+					</div>
+				</div>
+				
+
+
+
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nInicio">Num. inicio Fac:</label> <input
+							th:field="*{nInicio}" type="number" class="form-control"
+							name="nInicio" id="nInicio" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="nFin">Num. Fin Fac:</label> <input
+							th:field="*{nFin}" type="number" class="form-control"
+							name="nFin" id="nFin" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estado:</label> <select th:field="*{estado}"
+							id="estado" name="estado" class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>	
+			</div>
+			<br>
+			<br>
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+
+
+
+
+			<input type="hidden" th:field="*{id}">
+
+
+		
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		$(function() {
+			$("#fechaEstreno").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+	</script>
+</body>
+</html>

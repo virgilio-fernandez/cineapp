@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/peliculas/save}" th:object="${pelicula}"
+			method="post" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="titulo">Título</label> <input th:field="*{titulo}"
+							type="text" class="form-control" name="titulo" id="titulo"
+							required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="duracion">Duración (minutos)</label> <input
+							th:field="*{duracion}" type="number" class="form-control"
+							name="duracion" id="duracion" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="clasificacion" class="control-label">Clasificación</label>
+						<select th:field="*{clasificacion}" id="clasificacion"
+							name="clasificacion" class="form-control">
+							<option value="A">Clasificacion A</option>
+							<option value="B">Clasificacion B</option>
+							<option value="C">Clasificacion C</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="genero" class="control-label">Género</label> <select
+							th:field="*{genero}" id="genero" name="genero"
+							class="form-control">
+							<option value="Accion">Accion</option>
+							<option value="Aventura">Aventura</option>
+							<option value="Clasicas">Clasicas</option>
+							<option value="Comedia Romantica">Comedia Romantica</option>
+							<option value="Drama">Drama</option>
+							<option value="Terror">Terror</option>
+							<option value="Infantil">Infantil</option>
+							<option value="Accion y Aventura">Accion y Aventura</option>
+							<option value="Romantica">Romantica</option>
+							<option value="Fantasia">Fantasia</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estado</label> <select
+							th:field="*{estado}" id="estado" name="estado"
+							class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="fechaEstreno">Fecha Estreno</label> <input
+							th:field="*{fechaEstreno}" type="text" class="form-control"
+							name="fechaEstreno" id="fechaEstreno" required="required" />
+					</div>
+				</div>
+
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="file">Imagen</label> <input type="file" id="file"
+							name="file" />
+						<p class="help-block">Imagen de la pelicula</p>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="page-header">
+				<h3 class="blog-title">
+					<span class="label label-success">Detalle:</span>
+				</h3>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="director">Director</label> <input
+							th:field="*{detalle.director}" type="text" class="form-control"
+							name="director" id="director" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="actores">Actores</label> <input
+							th:field="*{detalle.actores}" type="text" class="form-control"
+							name="actores" id="actores" required="required" />
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="trailer">URL del Trailer (Youtube)</label> <input
+							th:field="*{detalle.trailer}" type="text" class="form-control"
+							name="trailer" id="trailer"
+							placeholder="URL completa del video de YOUTUBE"
+							required="required" />
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="sinopsis">Sinopsis</label>
+						<textarea th:field="*{detalle.sinopsis}" class="form-control"
+							rows="5" name="sinopsis" id="sinopsis"></textarea>
+					</div>
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+			<input type="hidden" th:field="*{id}"> <input type="hidden"
+				th:field="*{detalle.id}">
+
+
+
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		$(function() {
+			$("#fechaEstreno").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+	</script>
+</body>
+</html>

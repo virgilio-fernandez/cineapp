@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+
+	<div class="container">
+		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+
+		<br> <br>
+
+		<div class="table-responsive col-sm-4">
+			<table class="table ">
+				<tr>
+					<td><strong>Usuario:</strong></td>
+					<td
+						th:text="${venta.usuario.nombre}+' '+${venta.usuario.apellido1}+' '+${venta.usuario.apellido2}"></td>
+				</tr>
+				<tr>
+					<td><strong>Fecha:</strong></td>
+					<td  th:text="${#dates.format(venta.fecha, 'dd-MMMM-yyyy')}"></td>
+
+				</tr>
+				<tr>
+					<td><strong>Hora:</strong></td>
+					<td th:text="${venta.hora}"></td>
+				</tr>
+				<tr>
+					<td><strong>Cliente: </strong></td>
+					<td
+						th:text="${venta.cliente.nombre}+' '+${venta.cliente.apellido1}+' '+${venta.cliente.apellido2}"></td>
+				</tr>
+
+
+
+
+
+
+			</table>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th>N</th>
+					<th>Pelicula</th>
+					<th>Precio</th>
+					<th>Cantidad</th>
+					<th>Subtotal</th>
+
+				</tr>
+				<tr th:each="venta,iterStat: ${venta.detalleVenta} "
+					th:class="${iterStat.count}? 'count'">
+					<td th:text="${iterStat.count}"></td>
+					<td
+						th:text="${venta.horario.peliculaTipo.pelicula.titulo}+' /'+${venta.horario.peliculaTipo.tipo.nombre}+' /'+${venta.horario.peliculaTipo.tipo.calidad}+' /'+${venta.horario.peliculaTipo.tipo.audio}+' /'+${venta.horario.sala.nombre}"></td>
+					<td th:text="${venta.pUnit}">titulo</td>
+					<td th:text="${venta.cantidad}"></td>
+					<td th:text="${venta.subtotal}"></td>
+			</table>
+
+		</div>
+		<div class="row">
+			<div class="col-sm-8"></div>
+			<div class="col-sm-1">
+				<strong>Total: </strong>
+			</div>
+			<div class="col-sm-2">
+				<input class="form-control " type="text" th:value="${venta.total}">
+				<input type="hidden" id="horarios">
+			</div>
+		</div>
+
+		<br> <br>
+		<div class="row">
+			<div class="col-sm-6"></div>
+			<div class="col-sm-2">
+				<a th:href="@{'/ventas/imprimirFactura/' + ${venta.id}(format=pdf)}" class="btn btn-success"
+					role="button" title="Nueva Venta">Imprimir Factura</a>
+			</div>
+
+			<div class="col-sm-2">
+				<a th:href="@{/ventas/listar}" class="btn btn-danger"
+					role="button" title="Nueva Venta">Cancelar</a>
+			</div>
+		</div>
+		<hr class="featurette-divider">
+	</div>
+
+	<footer th:replace="layout/menu :: footer"> </footer>
+
+
+</body>
+</html>

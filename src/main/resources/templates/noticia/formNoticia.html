@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:action="@{/noticia/save}" th:object="${noticia}" method="post">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="titulo">Titulo</label> <input th:field="*{titulo}"
+							type="text" class="form-control" name="titulo" id="titulo"
+							required="required" />
+					</div>
+				</div>
+				
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estado" class="control-label">Estado</label> 
+						<select
+							th:field="*{estado}" id="estado" name="estado"
+							class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<label for="detalle">Detalles</label>
+						<textarea th:field="*{detalle}" class="form-control" path="detalle" id="detalle"
+							rows="10" > </textarea>
+					</div>
+				</div>
+			</div>
+
+
+
+			<input type="hidden" th:field="*{id}">
+
+
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script>
+		tinymce
+				.init({
+					selector : '#detalle',
+					plugins : "textcolor, table lists code, paste",	
+					paste_as_text: true ,
+					toolbar : " undo redo | bold italic | alignleft aligncenter alignright alignjustify \n\
+                  | bullist numlist outdent indent | forecolor backcolor table code"
+				});
+	
+	</script>
+</body>
+</html>

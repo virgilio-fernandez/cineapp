@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/menu :: head">
+
+</head>
+
+<body>
+
+	<header th:replace="layout/menu :: header"></header>
+	<div class="container ">
+
+		<div class="page-header">
+			<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+		</div>
+
+		<form th:object="${horario}" th:action="@{/horarios/save}"
+			method="post">
+			<div class="row">
+				<!--  			<div class="col-sm-3">
+					<div class="form-group">
+						<label for="idPelicula" class="control-label">Pelicula</label> 
+						<select
+							th:field="*{pelicula.id}" id="idPelicula" name="idPelicula"
+							class="form-control">
+							<option th:each="peli: ${peliculas}" th:value="${peli.id}"
+								th:utext="${peli.titulo}" />
+						</select>
+					</div>
+				</div>
+		-->
+				<div class="col-sm-8">
+					<div class="form-group">
+						<label for="idPelicula" class="control-label">Pelicula</label> <select
+							id="pelicula" name="pelicula" class="form-control">
+							<option th:each="peli: ${peliculasTipos}"
+								th:selected="(${peli.pelicula.id} == ${IdPelicula} and ${peli.tipo.id} == ${IdTipo})"
+								th:value="${peli.pelicula.id}+','+${peli.tipo.id}"
+								th:utext="${peli.pelicula.titulo} + '  ----  ' + ${peli.tipo.audio}+ '  ----  ' + ${peli.tipo.nombre}" />
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="fecha">Fecha </label> <input th:field="*{fecha}"
+							type="text" class="form-control" name="fecha" id="fecha"
+							required="required" />
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
+
+				
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="hora">Hora</label> <input th:field="*{hora}"
+							type="time" class="form-control" name="hora" id="hora"
+							placeholder="Formato: HH:mm Ejemplo 21:30" required="required" />
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="sala" class="control-label">Sala</label> <select
+							th:field="*{sala}" id="sala" name="sala" class="form-control">
+							<option th:each="sal: ${salas}" th:value="${sal.id}"
+								th:utext="${sal.nombre}" />
+
+						</select>
+					</div>
+				</div>
+
+				
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="precio">Precio</label>
+						<input type="number" class="form-control" step="0.01" name="precio" id="precio" th:field="*{precio}"
+							required="required" />
+
+					</div>
+
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label for="estatus" class="control-label">Estado</label> <select th:field="*{estado}"
+							id="estado" name="estado" class="form-control">
+							<option value="true">Activo</option>
+							<option value="false">Inactivo</option>
+						</select>
+					</div>
+				</div>
+				
+
+
+			</div>
+			<br>
+			<br>
+			<div class="row">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-3">
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<input class="btn btn-danger" type="button" value="Cancelar"
+						onClick="history.go(-1);">
+				</div>
+			</div>
+			
+			<input type="hidden" th:field="*{id}">
+
+			
+		</form>
+
+		<hr class="featurette-divider">
+
+	</div>
+	<footer th:replace="layout/menu :: footer"> </footer>
+	<script th:replace="horarios/js/javascript :: javascript"></script>
+	<script>
+		$(function() {
+			$("#fecha").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+
+		});
+	</script>
+</body>
+</html>
