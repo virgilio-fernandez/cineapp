@@ -88,11 +88,9 @@ public class InicioController {
 	@PostMapping("/buscar")
 	public String buscar(@RequestParam("fecha") String fecha, Model model) throws ParseException {		
 
-			System.out.println("FECHA INTROODUCIDA "+fecha);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Date fecha1 = sdf.parse(fecha);
-		
-			System.out.println("asd" +fecha1);
+
 			List<String> listaFechas = Utileria.getNextDays(4);
 			List<Pelicula> peliculas  = peliculaService.listarPorFecha(fecha1);
 			model.addAttribute("fechas", listaFechas);			
@@ -101,9 +99,6 @@ public class InicioController {
 			model.addAttribute("peliculas", peliculas);
 			model.addAttribute("publicidad", bannerService.listarActivos());
 			model.addAttribute("noticias", noticiaService.listarActivas());
-			for (int i = 0; i < peliculas.size(); i++) {
-				System.out.println(peliculas.get(i));
-			}
 			
 			return "index";
 	
@@ -126,9 +121,7 @@ public class InicioController {
 	}
 	@PostMapping("/guardar")
 	public String guardar(InformacionCine cine,@RequestParam("file") MultipartFile foto) {
-		System.out.println("esta es la foto"+ foto.getOriginalFilename());
 		if(!foto.isEmpty()) {
-			System.out.println("dentro if");
 			Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
 			String rootPath = directorioRecursos.toFile().getAbsolutePath();
 			try {
@@ -167,12 +160,7 @@ public class InicioController {
 	@GetMapping("/proximamente")
 	public String proximamente(Model model) throws ParseException {
 		Date fechaSinHora = dateFormat.parse(dateFormat.format(new Date()));
-	//	List<String> listaFechas = Utileria.getNextDays(4);	
-	
-		System.out.println(fechaSinHora);
-		List<Pelicula> peliculas = peliculaService.listarPorFechaEstreno(fechaSinHora);			
-	//	model.addAttribute("fechas", listaFechas);
-	//	model.addAttribute("fechaBusqueda", dateFormat.format(new Date()));
+		List<Pelicula> peliculas = peliculaService.listarPorFechaEstreno(fechaSinHora);
 		model.addAttribute("peliculas", peliculas);
 		return "proximamente";
 	}
@@ -181,9 +169,6 @@ public class InicioController {
 	public String cosultarDetalle(@PathVariable("id") int idPelicula, Model model) throws ParseException {
 
 		Pelicula pelicula=peliculaService.buscarPorid(idPelicula);
-	//	SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-	//	String fecha = sdf.format(pelicula.getFechaEstreno());
-	//	model.addAttribute("fechaBusqueda", fecha);
 		model.addAttribute("pelicula",pelicula );	
 		String string = pelicula.getDetalle().getTrailer();
 		String[] parts = string.split("=");
@@ -194,12 +179,7 @@ public class InicioController {
 	
 	@GetMapping("/promociones")
 	public String promociones(Model model) throws ParseException {
-		
-	
-		
-		List<Descuento> descuentos = descuentoService.listarActivos();			
-	//	model.addAttribute("fechas", listaFechas);
-	//	model.addAttribute("fechaBusqueda", dateFormat.format(new Date()));
+		List<Descuento> descuentos = descuentoService.listarActivos();
 		model.addAttribute("descuentos", descuentos);
 		return "promociones";
 	}

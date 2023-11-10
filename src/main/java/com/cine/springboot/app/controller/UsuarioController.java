@@ -85,26 +85,19 @@ public class UsuarioController {
 	@PostMapping("/save")
 	public String guardar(@Valid Usuario usuario, BindingResult result, Model model,
 			@RequestParam("roles") String roles, RedirectAttributes flash) {
-		System.out.println("dentro de guardar usuario");
-
 		
 		if (usuario.getId()>0) {
 			Usuario usuario2 = usuarioService.buscarPorId(usuario.getId());
-		
-				
-			System.out.println("para modificar");
+
 			List<Rol> listarol=usuario2.getRoles();
-			System.out.println(listarol.size());
+
 			for (int i = 0; i < listarol.size(); i++) {
 				System.out.println(listarol.get(i).getId());
-				usuarioService.eliminarRol(listarol.get(i).getId()); 
-					
-		
+				usuarioService.eliminarRol(listarol.get(i).getId());
 			}
 			
 		}
-	
-		
+
 		List<Rol> lista = new ArrayList<Rol>();
 		if (roles != null) {
 			String[] parts = roles.split(",");
@@ -143,7 +136,6 @@ public class UsuarioController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") int id, RedirectAttributes flash) {
 
-		System.out.println(id);
 		if (id > 0) {
 
 			usuarioService.eliminar(id);

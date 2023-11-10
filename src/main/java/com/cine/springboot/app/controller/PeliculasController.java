@@ -24,8 +24,6 @@ import com.cine.springboot.app.model.service.IPeliculaService;
 import com.cine.springboot.app.model.service.ITipoPeliculaService;
 import com.cine.springboot.app.model.service.ITipoService;
 
-//import net.itinajero.app.util.Utileria;
-
 @Controller
 @RequestMapping(value="/peliculas")
 public class PeliculasController {
@@ -38,14 +36,7 @@ public class PeliculasController {
 	
 	@Autowired
 	private IDetalleService detalleService;
-/*	@Autowired
-	private ITipoPeliculaService tipoPeliculaService;
-	
-	@Autowired
-	private ITipoService tipoService;
-*/	
-	
-	
+
 	@GetMapping("/listar")
 	public String listar(Model model) {
 		System.out.println("dentro servlet");
@@ -79,9 +70,7 @@ public class PeliculasController {
 	}
 	@PostMapping("/save")
 	public String guardar(Pelicula pelicula,@RequestParam("file") MultipartFile foto, RedirectAttributes flash) {
-		System.out.println("esta es la foto"+ foto.getOriginalFilename());
 		if(!foto.isEmpty()) {
-			System.out.println("dentro if");
 			String rootPath ="C://Temp//uploads//img-peliculas";
 			try {
 				byte[] bytes = foto.getBytes();
@@ -96,52 +85,31 @@ public class PeliculasController {
 		
 	
 		peliculaService.guardar(pelicula);
-		//detalleService.save(pelicula.getDetalle());
-	
+
 		flash.addFlashAttribute("success", "Pelicula guardada con éxito!");
 		return "redirect:/peliculas/listar";
 	}
 	
 	@RequestMapping (value="/eliminar/{id}")
 	public String eliminar(@PathVariable(value="id") int id, RedirectAttributes flash) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
 		if (id>0) {
-			System.out.println("entro a la condicion");
 			peliculaService.eliminar(id);
-		}	
-		System.out.println("salio de la condicion");
+		}
 		flash.addFlashAttribute("success", "Pelicula eliminada con éxito!");
 		return "redirect:/peliculas/listar";
 	}
 	@RequestMapping (value="/mostrarTipos/{id}")
 	public String mostrarTipos(@PathVariable(value="id") int id,Model model) {
 		model.addAttribute("titulo","Listado de tipos");
-	//	model.addAttribute("tiposAsignados",tipoPeliculaService.listarPorId(id));
 		model.addAttribute("tiposAsignados",peliculaService.listarTiposAsig(id));
 		model.addAttribute("tiposNoAsignados",peliculaService.listarTiposNoAsig(id));
 		model.addAttribute("idPelicula",id);
 		return "peliculas/mostrarTipos"; 
 	}
-	
-	/*@RequestMapping (value="/asignarTipos/{id}")
-	public String asignarTipos(@PathVariable(value="id") int id) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
-		if (id>0) {
-			System.out.println("entro a la condicion");
-			peliculaService.delete(id);
-		}	
-		System.out.println("salio de la condicion");
-		return "redirect:/peliculas/listar";  
-	}
-*/	 
+
 	@RequestMapping (value="/quitar/{idPelicula}/{idTipo}")
 	public String  quitarTipo(@PathVariable(value="idPelicula") int idPelicula,@PathVariable(value="idTipo") int idTipo, RedirectAttributes flash) {
-		System.out.println("dentro de borrar");
-		System.out.println(idTipo );
 		if (idPelicula>0) {
-			System.out.println(idPelicula+"  "+idTipo);
 			try {
 				peliculaService.quitarTipo(idPelicula,idTipo);
 			} catch (Exception e) {
@@ -149,21 +117,16 @@ public class PeliculasController {
 				return "redirect:/peliculas/mostrarTipos/"+idPelicula;
 			}
 			
-		}	
-		System.out.println("salio de la condicion");
+		}
 		flash.addFlashAttribute("success", "Se elimino con éxito!");
 		return "redirect:/peliculas/mostrarTipos/"+idPelicula;
 	}
 	
 	@RequestMapping (value="/asignar/{idPelicula}/{idTipo}")
 	public String  asignarTipo(@PathVariable(value="idPelicula") int idPelicula,@PathVariable(value="idTipo") int idTipo, RedirectAttributes flash) {
-		System.out.println("dentro de asignar");
-		System.out.println(idTipo );
 		if (idPelicula>0) {
-			System.out.println(idPelicula+"  "+idTipo);
 			peliculaService.asignarTipo(idPelicula,idTipo);
-		}	
-		System.out.println("salio de la condicion");
+		}
 		flash.addFlashAttribute("success", "Se asigno con éxito!");
 		return "redirect:/peliculas/mostrarTipos/"+idPelicula; 
 	}

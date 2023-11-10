@@ -6,107 +6,45 @@
 
 <body>
 
-	<header th:replace="layout/menu :: header"></header>
+<table th:fragment="lista" class="table table-hover table-striped table-bordered">
+  <tr>
+    <th>Nº</th>
+    <th>Pelicula</th>
+    <th>Tipo</th>
+    <th>Fecha</th>
+    <th>Hora</th>
+    <th>Sala</th>
+    <th>Precio</th>
+    <th>Estado</th>
+    <th>Opciones</th>
+  </tr>
+  <tr th:each="horario,iterStat: ${horarios}"
+      th:class="${iterStat.count}? 'count'">
+    <td th:text="${iterStat.count}"></td>
+    <td th:text="${horario.peliculaTipo.pelicula.titulo}"></td>
+    <td th:text="${horario.peliculaTipo.tipo.nombre}"></td>
+    <td th:text="${horario.fecha}"></td>
+    <td th:text="${horario.hora}"></td>
+    <td th:text="${horario.sala.nombre}"></td>
+    <td th:text="${horario.precio}"></td>
+    <td><span th:if="${horario.estado == true}" th:text="Activo"
+              class="label label-success"></span> <span
+        th:if="${horario.estado != true}" th:text="Inactivo"
+        class="label label-success"></span></td>
+    <td><a th:href="@{/horarios/form/} + ${horario.id}"
+           class="btn btn-success btn-sm" role="button" title="Edit"><span
+        class="glyphicon glyphicon-pencil">Modificar</span></a>
+      <a
+          th:if="${horario.estado == true}"
+          onclick="return confirm('Estas seguro que desea eliminar?');"
+          th:href="@{/horarios/eliminar/} + ${horario.id}"
+          class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
+          class="glyphicon glyphicon-trash">Eliminar</span></a>
+    </td>
+  </tr>
 
-	<div class="container">
-		<br><h2 ><span th:text="${titulo}" class="badge badge-dark"></span></h2> <br>
+</table>
 
-		<form  th:object="${horario}" th:action="@{/horarios/form}"
-			method="post">
-
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="fecha">Fecha:</label> <input type="text" th:field="*{fecha}"
-							class="form-control" name="fecha" id="fecha" required="required" />
-					</div>
-				</div>
-				<div class="col-sm-3">
-					<div class="form-group">
-						<label for="sala" class="control-label">Sala:</label> <select th:field="*{sala}"
-							id="sala" name="sala" class="form-control">
-							<option th:each="sal: ${salas}" th:value="${sal.id}"
-								th:utext="${sal.nombre}" />
-
-						</select>
-					</div>
-				</div>
-				<div class="col-sm-1">
-					<div class="form-group">
-						<label for="sala" class="control-label" style="color: white;">Sala:</label>
-						<input class="btn btn-info " type="button" value="Filtrar"
-							onClick="filtrar();">
-					</div>
-
-				</div>
-
-			</div>
-			<div class="row"> 
-				
-				<button  type="submit" class="btn btn-success">Adicionar</button>
-			</div>
-		</form>
-	
-	<br>
-
-	<div class="row">
-
-		<div id="mostrar" class="table-responsive">
-			<table class="table table-hover table-striped table-bordered">
-				<tr>
-					<th>Nº</th>
-					<th>Pelicula</th>
-					<th>Tipo</th>
-					<th>Fecha</th>
-					<th>Hora</th>
-					<th>Sala</th>
-					<th>Precio</th>
-					<th>Estado</th>
-					<th>Opciones</th>
-				</tr>
-				<tr th:each="horario,iterStat: ${horarios}"
-					th:class="${iterStat.count}? 'count'">
-					<td th:text="${iterStat.count}"></td>
-					<td th:text="${horario.peliculaTipo.pelicula.titulo}"></td>
-					<td th:text="${horario.peliculaTipo.tipo.nombre}"></td>
-					<td th:text="${#dates.format(horario.fecha, 'dd-MMM-yyyy')}"></td>
-					<td th:text="${#dates.format(horario.hora, 'HH:mm')}"></td>
-					<td th:text="${horario.sala.nombre}"></td>
-					<td th:text="${horario.precio}"></td>
-					<td><span th:if="${horario.estado == true}" th:text="Activo"
-						class="label label-success"></span> <span
-						th:if="${horario.estado != true}" th:text="Inactivo"
-						class="label label-success"></span></td>
-					<td><a th:href="@{/horarios/form/} + ${horario.id}"
-						class="btn btn-success btn-sm" role="button" title="Edit"><span
-							class="glyphicon glyphicon-pencil">Modificar</span></a> 
-					<a
-						th:if="${horario.estado == true}" onclick="return confirm('Estas seguro que desea eliminar?');"
-						th:href="@{/horarios/eliminar2/} + ${horario.id}"
-						class="btn btn-danger btn-sm" role="button" title="Eliminar"><span
-							class="glyphicon glyphicon-trash">Eliminar</span></a></td>
-				</tr>
-				
-			</table>
-		</div>
-
-
-	</div>
-
-
-	<hr class="featurette-divider">
-	</div>
-
-	<footer th:replace="layout/menu :: footer"> </footer>
-	<script th:replace="horarios/js/javascript :: javascript"></script>
-	<script>
-		$(function() {
-			$("#fecha").datepicker({
-				dateFormat : 'dd-mm-yy'
-			});
-
-		});
-	</script>
 
 </body>
 </html>

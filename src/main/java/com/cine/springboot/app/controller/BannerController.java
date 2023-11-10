@@ -62,8 +62,6 @@ public class BannerController {
 	public String guardar(Banner banner,@RequestParam("file") MultipartFile foto, RedirectAttributes flash,	Authentication authentication) {
 		System.out.println("esta es la foto"+ foto.getOriginalFilename());
 		if(!foto.isEmpty()) {
-			System.out.println("dentro if");
-			
 			String rootPath ="C://Temp//uploads//img-banner";
 			try {
 				byte[] bytes = foto.getBytes();

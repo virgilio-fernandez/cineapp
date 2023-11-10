@@ -82,7 +82,6 @@ public class VentasController {
 
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		System.out.println("dentro servlet ventas");
 		model.addAttribute("titulo", "Listado de Ventas");
 		model.addAttribute("ventas", ventaService.listar());
 		return "ventas/listVentas";
@@ -133,7 +132,6 @@ public class VentasController {
 	@GetMapping(value = "/buscarCliente/{term}", produces = { "application/json" })
 	public @ResponseBody Cliente buscarCliente(@PathVariable String term) {
 		Cliente cli = clienteService.buscarPorNit(term);
-		System.out.println(cli);
 		return cli;
 	}
 
@@ -143,9 +141,7 @@ public class VentasController {
 		String nombre = req.getParameter("add-nombre");
 		String apellido1 = req.getParameter("add-apellido1");
 		String apellido2 = req.getParameter("add-apellido2");
-		// String id=req.getParameter("add-id");
 		Cliente cli = new Cliente();
-		// cli.setId(Integer.parseInt(id));
 		cli.setNit(nit);
 		cli.setNombre(nombre);
 		cli.setApellido1(apellido1);
@@ -154,7 +150,6 @@ public class VentasController {
 		Date date = new Date();
 		cli.setFecha(date);
 		clienteService.guardar(cli);
-		// System.out.println(cli);
 		return cli;
 	}
 
@@ -210,7 +205,6 @@ public class VentasController {
 			horarioService.guardar(horario);
 		}
 
-		// obteniendo ultima factura
 
 		Factura fac = new Factura();
 		try {
@@ -274,10 +268,8 @@ public class VentasController {
 	@RequestMapping(value = "/imprimirFactura/{id}", produces = "application/pdf")
 	public String imprimirFactura(@PathVariable(value = "id") int id, Map<String, Object> model,
 			RedirectAttributes flash) {
-		System.out.println(id);
 		Venta venta = ventaService.buscarPorId(id);
 		Factura factura = facturaService.buscarFacturaPorVenta(venta.getId());
-		System.out.println(factura.toString());
 
 		double num = venta.getTotal();
 		int nEntero = (int) (num);
@@ -301,9 +293,6 @@ public class VentasController {
 			Authentication authentication,	RedirectAttributes flash) {
 		
 		Usuario user = usuarioService.buscarPorUsername(authentication.getName());
-
-		System.out.println(id);
-
 		List<Boleto> lista = boletoService.listarPorId(id);
 		model.put("lista", lista);
 		model.put("user", user);
@@ -313,13 +302,9 @@ public class VentasController {
 	
 	@RequestMapping (value="/anular/{id}")
 	public String anular(@PathVariable(value="id") int id) {
-		
-		System.out.println(id);
 		if (id>0) {
-		
 			ventaService.anular(id);
-		}	
-		System.out.println("salio de la condicion");
+		}
 		return "redirect:/ventas/listar";
 	}
 	

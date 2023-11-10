@@ -42,24 +42,12 @@ public class ReportesController {
 
 	}
 
-	/*@GetMapping("/reportePelicula")
-	public String reportePelicula(Model model) {
-		System.out.println("dentro servlet salas");
-		model.addAttribute("titulo", "Reportes");
-
-		return "reportes/reportePelicula";
-
-	}
-*/
-
 	@RequestMapping(value = "/imprimirReporte", produces = "application/pdf")
 	public String imprimir(HttpServletRequest req, Map<String, Object> model, RedirectAttributes flash)
 			throws ParseException {
 		String filtro = req.getParameter("filtro");
 		String fechas = req.getParameter("date_range");
 		String pelicula = req.getParameter("pelicula");
-		System.out.println(filtro + "  datos  " + fechas);
-
 		String[] parts = fechas.split(" / ");
 		String f1 = parts[0];
 		String f2 = parts[1];
@@ -102,12 +90,6 @@ public class ReportesController {
 			}
 			
 		}
-		
-		
-	
-	
-		System.out.println(list.size());
-		
 	
 		model.put("lista", list);
 		model.put("totales", total);
@@ -119,7 +101,6 @@ public class ReportesController {
 	
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listarVentas(Map<String, Object> model, @RequestParam("fechas") String fechas, @RequestParam("filtro") String filtro) throws ParseException {
-		System.out.println("filtro: "+filtro);
 		String[] parts = fechas.split(" / ");
 		String f1 = parts[0];
 		String f2 = parts[1];
@@ -142,15 +123,9 @@ public class ReportesController {
 			list = reporteService.ListarVentasAnuladas(fecha1, fecha2);
 			total = reporteService.calcularTotalAnuladas(fecha1, fecha2);
 		}
-		
-		System.out.println(list.size());
-		
-		
 		model.put("lista", list);
 		model.put("total", total);
-		
-		//mostrando peliculas vendidas en el rango de fechas
-		
+
 		List<Pelicula> listaPeliculas = reporteService.ListarPeliculas(fecha1, fecha2);
 		
 		
@@ -163,7 +138,6 @@ public class ReportesController {
 	
 	@RequestMapping(value = "/listarPorPelicula", method = RequestMethod.GET)
 	public String listarPorPelicula(Map<String, Object> model, @RequestParam("fechas") String fechas, @RequestParam("filtro") String filtro, @RequestParam("idPelicula") int idPelicula) throws ParseException {
-		System.out.println("filtro: "+filtro);
 		String[] parts = fechas.split(" / ");
 		String f1 = parts[0];
 		String f2 = parts[1];
@@ -186,9 +160,6 @@ public class ReportesController {
 			list = reporteService.ListarVentasAnuladasPorPelicula(fecha1, fecha2,idPelicula);
 			total = reporteService.calcularTotalAnuladasPorPelicula(fecha1, fecha2,idPelicula);
 		}
-		
-		System.out.println(list.size());
-		
 		
 		model.put("lista", list);
 		model.put("total", total);

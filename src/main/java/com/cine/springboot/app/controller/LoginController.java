@@ -15,8 +15,6 @@ public class LoginController {
 	public String login(@RequestParam(value="error", required=false) String error,
 			@RequestParam(value="logout", required = false) String logout, 
 			Model model, Principal principal,RedirectAttributes flash) {
-	//	System.out.println("dentro login"+" error: "+error+"      logout:"+logout);
-	//	System.out.println("ingresando a la pagina");
 		if(principal !=null) {
 			flash.addFlashAttribute("info", "Ya ha iniciado sesion anteriormente");
 			return "redirect:/";

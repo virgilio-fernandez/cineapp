@@ -71,13 +71,10 @@ public class DescuentosController {
 	
 	@RequestMapping (value="/eliminar/{id}")
 	public String borrar(@PathVariable(value="id") int id, RedirectAttributes flash) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
 		if (id>0) {
 			System.out.println("entro a la condicion");
 			descuentoService.borrarLogico(id);
-		}	
-		System.out.println("salio de la condicion");
+		}
 		flash.addFlashAttribute("success", "Descuento eliminado con éxito!");
 		return "redirect:/descuentos/listar";
 	}

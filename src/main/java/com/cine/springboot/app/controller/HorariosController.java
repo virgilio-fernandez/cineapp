@@ -37,56 +37,32 @@ public class HorariosController {
 	private ITipoPeliculaService tipoPeliculaService;
 
 	@GetMapping("/listar")
-	public String listar(Horario horario, Map<String, Object> model,HttpServletRequest request) {
-		
-		
-		
-		HttpSession misession= (HttpSession) request.getSession();
-		Sala sala= (Sala) misession.getAttribute("sala");
-		Date fecha= (Date)  misession.getAttribute("fecha");
-		if (sala!=null && fecha!=null) {
-			model.put("titulo", "Listado de horarios");
-			horario.setFecha(fecha);
-			horario.setSala(sala);
-			model.put("horario", horario);
-			model.put("salas", salasService.listarActivas());
-			
-		}else {
-			model.put("titulo", "Listado de horarios");
-			Date date=new Date();
-			horario.setFecha(date);
-			model.put("salas", salasService.listarActivas());
-			model.put("horario", horario);
-		}
-		
-		
-		return "horarios/listHorarios";
-
+	public String listar(Horario horario, Map<String, Object> model, HttpServletRequest request) {
+		model.put("titulo", "Listado de horarios");
+		Date date = new Date();
+		horario.setFecha(date);
+		model.put("salas", salasService.listarActivas());
+		model.put("horario", horario);
+		return "horarios/listar";
 	}
 
-	@RequestMapping(value = "/listarHorarios", method = RequestMethod.GET)
+	@GetMapping("/listarHorarios")
 	public String filtrar(Map<String, Object> model, @RequestParam("fecha") String fecha,
 			@RequestParam("sala") String sala) throws ParseException {
-		System.out.println("fecha: " + fecha);
-		System.out.println("sala: " + sala);
-
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		Date fecha1 = sdf.parse(fecha);
-
 		model.put("horarios", horarioService.listarPorFechaSala(fecha1, Integer.parseInt(sala)));
-		return "horarios/listar :: lista";
+		return "horarios/listHorarios :: lista";
 	}
 
 	@RequestMapping(value = "/form")
-	public String adicionar(Horario horario, Map<String, Object> model, @RequestParam("fecha") String fecha,
+	public String adicionar(Horario horario, Map<String, Object> model,
+			@RequestParam("fecha") String fecha,
 			@RequestParam("sala") String sala) throws ParseException {
-		
+
 		model.put("titulo", "Adicionar  Horario");
 
 		model.put("peliculasTipos", tipoPeliculaService.listarPorPeliculaActiva());
-
-
-	
 
 		model.put("salas", salasService.listarActivas());
 		model.put("h", horario);
@@ -94,37 +70,24 @@ public class HorariosController {
 	}
 
 	@PostMapping("/save")
-	public String guardar(Horario horario, @RequestParam("pelicula") String pelicula, Map<String, Object> model, RedirectAttributes flash,HttpServletRequest request) {
-		System.out.println(pelicula);
+	public String guardar(Horario horario, @RequestParam("pelicula") String pelicula,
+			Map<String, Object> model, RedirectAttributes flash, HttpServletRequest request) {
 		TipoPelicula tipoPelicula = new TipoPelicula();
 		String[] parts = pelicula.split(",");
-		String part1 = parts[0]; 
+		String part1 = parts[0];
 		String part2 = parts[1];
 		int idPelicula = Integer.parseInt(part1);
 		int idTipo = Integer.parseInt(part2);
 		tipoPelicula = tipoPeliculaService.buscarPorId(idPelicula, idTipo);
 		horario.setPeliculaTipo(tipoPelicula);
-
 		Sala sala = salasService.buscarPorId(horario.getSala().getId());
 		horario.setAsientosDisponibles(sala.getnAsientos());
-
 		horarioService.guardar(horario);
 		flash.addFlashAttribute("success", "Horario guardado con éxito!");
-		
-		
 		model.put("titulo", "Listado de horarios");
-		
 		model.put("salas", salasService.listarActivas());
-
-		
 		model.put("horario", horario);
-	//	return "horarios/listHorarios";
-		
-		HttpSession misession= request.getSession(true);
-		misession.setAttribute("fecha",horario.getFecha());
-		misession.setAttribute("sala",sala);
-		
-		
+
 		return "redirect:/horarios/listar";
 	}
 
@@ -140,7 +103,6 @@ public class HorariosController {
 		model.put("titulo", "Modificar Horario");
 		model.put("horario", horario);
 
-//		model.put("peliculas",peliculaService.findAll());
 		model.put("peliculasTipos", tipoPeliculaService.findAll());
 		model.put("IdTipo", horario.getPeliculaTipo().getTipo().getId());
 		model.put("IdPelicula", horario.getPeliculaTipo().getPelicula().getId());
@@ -148,41 +110,13 @@ public class HorariosController {
 		return "horarios/formHorario";
 	}
 
-	/*@RequestMapping(value = "/eliminar/{id}")
-	public String borrar(@PathVariable(value = "id") int id) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
-		if (id > 0) {
-			System.out.println("entro a la condicion");
-			horarioService.borrarLogico(id);
-		}
-		System.out.println("salio de la condicion");
-		return "redirect:/horarios/listar";
-	}
-	*/
-/*	@GetMapping(value = "/eliminar/{id}", produces = { "application/json" })
-	public @ResponseBody Horario eliminar(@PathVariable int id) {
-		
-		horarioService.borrarLogico(id);
-		Horario horario = horarioService.buscarPorId(id);
-		
-		return horario;
-	}
-*/	
-	
 	@RequestMapping(value = "/eliminar/{id}")
-	public String eliminar(@PathVariable(value = "id") int id, Map<String, Object> model, RedirectAttributes flash,HttpServletRequest request) {	
+	public String eliminar(@PathVariable(value = "id") int id, Map<String, Object> model,
+			RedirectAttributes flash, HttpServletRequest request) {
 		horarioService.borrarLogico(id);
 		Horario horario = horarioService.buscarPorId(id);
-		HttpSession misession= request.getSession(true);
-		misession.setAttribute("fecha",horario.getFecha());
-		misession.setAttribute("sala",horario.getSala());
-		
 		flash.addFlashAttribute("success", "Horario eliminado con éxito!");
-		
-		
 		return "redirect:/horarios/listar";
 	}
-	
 	
 }

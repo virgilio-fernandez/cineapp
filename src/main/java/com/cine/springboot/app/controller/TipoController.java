@@ -22,7 +22,6 @@ public class TipoController {
 	
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		System.out.println("dentro servlet tipos");
 		model.addAttribute("titulo","Listado de tipos de peliculas");
 		model.addAttribute("tipos",tipoService.listar());
 		return "tipos/listTipos";
@@ -58,14 +57,10 @@ public class TipoController {
 	
 	@RequestMapping (value="/eliminar/{id}")
 	public String eliminar(@PathVariable(value="id") int id, RedirectAttributes flash) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
 		if (id>0) {
-			System.out.println("entro a la condicion");
 			tipoService.borrarLogico(id);
 			flash.addFlashAttribute("success", "Tipo eliminado con éxito!");
-		}	
-		System.out.println("salio de la condicion");
+		}
 		return "redirect:/tipos/listar";
 	}
 }

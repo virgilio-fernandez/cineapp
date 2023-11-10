@@ -23,7 +23,6 @@ public class SalasController {
 	
 	@GetMapping("/listar")
 	public String listar(Model model) {
-		System.out.println("dentro servlet salas");
 		model.addAttribute("titulo","Listado de salas");
 		model.addAttribute("salas",salasService.listar());
 		return "salas/listSalas";
@@ -60,10 +59,7 @@ public class SalasController {
 	
 	@RequestMapping (value="/eliminar/{id}")
 	public String eliminar(@PathVariable(value="id") int id, RedirectAttributes flash) {
-		System.out.println("dentro de borrar");
-		System.out.println(id);
 		if (id>0) {
-			System.out.println("entro a la condicion");
 			salasService.borrarLogico(id);
 			flash.addFlashAttribute("success", "Sala eliminada con éxito!");
 		}	
